@@ -19,6 +19,16 @@ namespace login.Controllers
         public IActionResult Login(LoginAdd log)
         {
             var l = _repo.LoginFunction(log.Email, log.Password);
+                var claims = new List<Claim>
+                {
+                    new Claim("Department", "HR") // Example claim
+                };
+
+    var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+    var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
+
+    return Ok("Login successful.");
             return Ok(l);
         }
     }
